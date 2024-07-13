@@ -30,4 +30,8 @@ async function sortByGroups(api, token) {
     console.log(result.join("\n"))
 }
 
-export default sortByGroups;
+export default {
+    name: 'Sort by Groups',
+    description: "Show a list of members sorted by the number of groups they're in",
+    function: sortByGroups
+};

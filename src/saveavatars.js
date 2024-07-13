@@ -21,15 +21,18 @@ const saveFile = async function(url, dir, id, type) {
 }
 
 async function saveAvatars(api, token) {
-	var sys = await api.getSystem({fetch: ['members']});
+	var sys = await api.getSystem({fetch: ['members', 'groups']});
 	if(!fs.existsSync(dir)) fs.mkdirSync(dir);
+	if(!fs.existsSync(`${dir}/members`)) fs.mkdirSync(`${dir}/members`);
+	if(!fs.existsSync(`${dir}/groups`)) fs.mkdirSync(`${dir}/groups`);
+	if(!fs.existsSync(`${dir}/system`)) fs.mkdirSync(`${dir}/system`);
 
 	try {
 		if(sys.avatar_url) 
-			await saveFile(sys.avatar_url, dir, 'system', 'avatar');
+			await saveFile(sys.avatar_url, `${dir}/system`, 'system', 'avatar');
 
 		if(sys.banner)
-			await saveFile(sys.banner, dir, 'system', 'banner');
+			await saveFile(sys.banner, `${dir}/system`, 'system', 'banner');
 	} catch(e) {
 		console.log({
 			msg: e.message ?? e,
@@ -39,18 +42,18 @@ async function saveAvatars(api, token) {
 	}
 
 	for(var [id, m] of sys.members) {
-		console.log(`Fetching images for ${m.id}...`);
+		console.log(`Fetching images for member ${m.id}...`);
 		try {
 			if(m.avatar_url) {
-				await saveFile(m.avatar_url, dir, m.id, 'avatar');
+				await saveFile(m.avatar_url, `${dir}/members`, m.id, 'avatar');
 			}
 				
 			if(m.webhook_avatar_url) {
-				await saveFile(m.webhook_avatar_url, dir, m.id, 'proxy');
+				await saveFile(m.webhook_avatar_url, `${dir}/members`, m.id, 'proxy');
 			}
 
 			if(m.banner) {
-				await saveFile(m.banner, dir, m.id, 'banner');
+				await saveFile(m.banner, `${dir}/members`, m.id, 'banner');
 			}
 		} catch(e) {
 			console.log({
@@ -64,6 +67,34 @@ async function saveAvatars(api, token) {
 		await wait(500);
 		// break;
 	}
+
+	for(var [id, g] of sys.groups) {
+		console.log(`Fetching images for group ${g.id}...`);
+		try {
+			if(g.icon) {
+				await saveFile(g.icon, `${dir}/groups`, g.id, 'avatar');
+			}
+
+			if(g.banner) {
+				await saveFile(g.banner, `${dir}/groups`, g.id, 'banner');
+			}
+		} catch(e) {
+			console.log({
+				msg: e.message ?? e,
+				avatar: g.avatar_url,
+				banner: g.banner
+			})
+		}
+		console.log('Images fetched!');
+		await wait(500);
+		// break;
+	}
+
+	return { success: true };
 }
 
-export default saveAvatars;
+export default {
+	name: 'Save Avatars',
+	description: "Download your system, member, and group avatars/banners",
+	function: saveAvatars
+};

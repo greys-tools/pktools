@@ -33,4 +33,8 @@ async function massDelete(api, token) {
 	}
 }
 
-export default massDelete;
+export default {
+	name: "Mass Delete",
+	description: "Mass delete members based on given criteria",
+	function: massDelete
+};
