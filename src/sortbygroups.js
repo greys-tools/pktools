@@ -27,7 +27,8 @@ async function sortByGroups(api, token) {
     }).reverse();
 
     var result = linked.map(x => `${x.name} ${x.groups.length.toString().padStart((longest.length + 1) - x.name.length, ` `)}`);
-    console.log(result.join("\n"))
+
+    return { success: true, message: '\nRESULTS:\n' + result.join("\n") + "\n\n" }
 }
 
 export default {
