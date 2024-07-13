@@ -43,6 +43,12 @@ const CHOICES = [
 		description: "Delete all members",
 		value: 'all',
 		function: (m) => true
+	},
+	{
+		id: 'back',
+		name: 'Go Back',
+		description: "Go back to tool selection",
+		value: 'back'
 	}
 ]
 
@@ -62,6 +68,8 @@ async function massDelete(api, token) {
 			return rest;
 		})
 	})
+
+	if(answer == 'back') return { success: true };
 
 	var choice = CHOICES.find(x => x.id == answer);
 	let opts = { };
