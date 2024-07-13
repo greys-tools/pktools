@@ -30,6 +30,12 @@ async function saveAvatars(api, token) {
 
 		if(sys.banner)
 			await saveFile(sys.banner, dir, 'system', 'banner');
+	} catch(e) {
+		console.log({
+			msg: e.message ?? e,
+			avatar: sys.avatar_url,
+			banner: sys.banner
+		})
 	}
 
 	for(var [id, m] of sys.members) {
