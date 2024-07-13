@@ -14,30 +14,37 @@ const wait = async function(ms) {
 	})
 }
 
+const saveFile = async function(url, dir, id, type) {
+	let resp = await axios.get(url, { responseType: 'arraybuffer' });
+	if(resp) resp = resp.data;
+	fs.writeFileSync(`${dir}/${id}_${type}.webp`, Buffer.from(resp, 'binary'));
+}
+
 async function saveAvatars(api, token) {
 	var sys = await api.getSystem({fetch: ['members']});
 	if(!fs.existsSync(dir)) fs.mkdirSync(dir);
 
+	try {
+		if(sys.avatar_url) 
+			await saveFile(sys.avatar_url, dir, 'system', 'avatar');
+
+		if(sys.banner)
+			await saveFile(sys.banner, dir, 'system', 'banner');
+	}
+
 	for(var [id, m] of sys.members) {
 		console.log(`Fetching images for ${m.id}...`);
-		let resp;
 		try {
 			if(m.avatar_url) {
-				let resp = await axios.get(m.avatar_url, { responseType: 'arraybuffer' });
-				if(resp) resp = resp.data;
-				fs.writeFileSync(`${dir}/${m.id}_avatar.webp`, Buffer.from(resp, 'binary'));
+				await saveFile(m.avatar_url, dir, m.id, 'avatar');
 			}
 				
 			if(m.webhook_avatar_url) {
-				await axios.get(m.webhook_avatar_url, { responseType: 'arraybuffer' });
-				if(resp) resp = resp.data;
-				fs.writeFileSync(`${dir}/${m.id}_proxy.webp`, Buffer.from(resp, 'binary'));
+				await saveFile(m.webhook_avatar_url, dir, m.id, 'proxy');
 			}
 
 			if(m.banner) {
-				let resp = await axios.get(m.banner, { responseType: 'arraybuffer' });
-				if(resp) resp = resp.data;
-				fs.writeFileSync(`${dir}/${m.id}_banner.webp`, Buffer.from(resp, 'binary'));
+				await saveFile(m.banner, dir, m.id, 'banner');
 			}
 		} catch(e) {
 			console.log({

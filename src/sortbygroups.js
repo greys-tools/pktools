@@ -7,7 +7,6 @@ async function sortByGroups(api, token) {
     var longest = "";
 
     for(var [id, g] of groups) {
-    	console.log(g.members);
     	if(!g.members) continue;
         for(var m of g.members) {
             var mg = linked.get(m);

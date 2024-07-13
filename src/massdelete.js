@@ -1,8 +1,20 @@
-const SKIP = [
-	// 'abcde',
-	// 'fghij'
-	// etc etc
-];
+const CRITERIA = [
+	{
+		label: 'No description',
+		description: "Delete members with no description",
+		function: (m) => !m.description
+	},
+	{
+		label: 'No avatar',
+		description: "Delete members with no avatar",
+		function: (m) => !m.avatar
+	},
+	{
+		label: 'All',
+		description: "Delete all members",
+		function: (m) => true
+	}
+]
 
 const wait = async function(ms) {
 	return new Promise((res, rej) => {
