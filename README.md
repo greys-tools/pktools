@@ -4,7 +4,8 @@
 ## Setup
 1. Download this repository and extract it to somewhere safe
 2. Download and install [NodeJS](https://nodejs.org/)
-3. Run the `run` file for your system
+3. Copy the `.env.example`, fill it out, and save the file/rename it as `.env`
+4. Run the `run` file for your system
 
 ## Available Tools
 ### Mass Delete
