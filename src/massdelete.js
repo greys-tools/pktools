@@ -1,31 +1,32 @@
-import { select, input } from '@inquirer/prompts';
+import { select, text } from '@clack/prompts';
 
 const CHOICES = [
 	{
 		id: 'nodesc',
-		name: 'No description',
-		description: "Delete members with no description",
+		label: 'No description',
+		hint: "Delete members with no description",
 		value: 'nodesc',
 		function: (m) => !m.description
 	},
 	{
 		id: 'noav',
-		name: 'No avatar',
-		description: "Delete members with no avatar",
+		label: 'No avatar',
+		hint: "Delete members with no avatar",
 		value: 'noav',
 		function: (m) => !m.avatar_url
 	},
 	{
 		id: 'group',
-		name: "Group",
-		description: "Delete members in a specific group",
+		label: "Group",
+		hint: "Delete members in a specific group",
 		value: 'group',
 		function: (m, opts) => {
 			return opts.group.members.has(m.id);
 		},
 		options: async (api, token) => {
-			var answer = await input({
-				message: 'Enter the ID of the group you want to delete from'
+			var answer = await text({
+				message: 'Enter the ID of the group you want to delete from',
+				placeholder: 'ABC-DEF'
 			})
 
 			var group = await api.getGroup({
@@ -39,15 +40,15 @@ const CHOICES = [
 	},
 	{
 		id: 'all',
-		name: 'All',
-		description: "Delete all members",
+		label: 'All',
+		hint: "Delete all members",
 		value: 'all',
 		function: (m) => true
 	},
 	{
 		id: 'back',
-		name: 'Go Back',
-		description: "Go back to tool selection",
+		label: 'Go Back',
+		hint: "Go back to tool selection",
 		value: 'back'
 	}
 ]
@@ -63,10 +64,7 @@ async function massDelete(api, token) {
 
 	var answer = await select({
 		message: 'Select which criteria to use:',
-		choices: CHOICES.map(x => {
-			let { function: func, id, ...rest } = x;
-			return rest;
-		})
+		options: CHOICES
 	})
 
 	if(answer == 'back') return { success: true };

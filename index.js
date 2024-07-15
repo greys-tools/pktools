@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import PKAPI from 'pkapi.js';
 
-import { select } from '@inquirer/prompts';
+import { select, spinner } from '@clack/prompts';
 
 import tools from './src/index.js';
 
@@ -9,6 +9,7 @@ const API = new PKAPI({ token: process.env.TOKEN });
 
 (async () => {
 	const doing = true;
+	const s = spinner();
 	let result;
 	let jobs = 0;
 	while(doing) {
@@ -29,24 +30,28 @@ const API = new PKAPI({ token: process.env.TOKEN });
 		// prompt user for a tool to use and run it
 		const answer = await select({
 			message: 'Select which tool you would like to use:',
-			choices: [
+			options: [
 				...tools.map(x => ({
-					name: x.name,
-					description: x.description,
+					label: x.name,
+					hint: x.description,
 					value: x.function
 				})),
 				{
-					name: 'Exit',
-					description: 'Close the program',
-					value: () => process.exit(0)
+					label: 'Exit',
+					hint: 'Close the program',
+					value: () => 'exit'
 				}
 			]
 		})
 
 		try {
+			s.start()
 			result = await answer(API, process.env.TOKEN);
+			s.stop()
 		} catch(e) {
 			console.error(e.message ?? e);
 		}
+
+		if(result == 'exit') process.exit(0);
 	}
 })()
