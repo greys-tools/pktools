@@ -26,7 +26,7 @@ async function sortByGroups(api, token) {
         return a.groups.length - b.groups.length;
     }).reverse();
 
-    var result = linked.map(x => `${x.name} ${x.groups.length.toString().padStart((longest.length + 1) - x.name.length, ` `)}`);
+    var result = linked.map(x => `${x.name} ${x.groups.length.toString().padStart((longest.length + 5) - x.name.length, ` `)}`);
 
     return { success: true, message: '\nRESULTS:\n' + result.join("\n") + "\n\n" }
 }

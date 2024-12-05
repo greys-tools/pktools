@@ -42,6 +42,10 @@ async function saveAvatars(api, token) {
 	}
 
 	for(var [id, m] of sys.members) {
+		if(!m.avatar_url &&
+			!m.webhook_avatar_url &&
+			!m.banner) continue;
+
 		console.log(`Fetching images for member ${m.id}...`);
 		try {
 			if(m.avatar_url) {
@@ -69,6 +73,7 @@ async function saveAvatars(api, token) {
 	}
 
 	for(var [id, g] of sys.groups) {
+		if(!g.banner && !g.icon) continue;
 		console.log(`Fetching images for group ${g.id}...`);
 		try {
 			if(g.icon) {
