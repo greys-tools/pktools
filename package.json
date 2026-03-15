@@ -12,8 +12,6 @@
   "type": "module",
   "dependencies": {
     "@clack/prompts": "1.1.0",
-    "axios": "^1.13.6",
-    "dotenv": "^16.6.1",
     "pkapi.js": "^6.2.1"
   }
 }
