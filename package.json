@@ -11,9 +11,9 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@clack/prompts": "^0.7.0",
-    "axios": "^1.6.7",
-    "dotenv": "^16.0.3",
-    "pkapi.js": "^6.2.0"
+    "@clack/prompts": "1.1.0",
+    "axios": "^1.13.6",
+    "dotenv": "^16.6.1",
+    "pkapi.js": "^6.2.1"
   }
 }

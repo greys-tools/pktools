@@ -1,37 +1,30 @@
-import 'dotenv/config';
 import PKAPI from 'pkapi.js';
 import { select, spinner, text, intro } from '@clack/prompts';
-import { writeFile, readFile } from 'fs/promises';
+import { file, write } from 'bun';
 
 import tools from './src/index.js';
 
 const API = new PKAPI();
 
-(async () => {
-	let config;
+const main = async () => {
+	var config;
 
 	try {
-		let contents = await readFile('./config.json');
-		config = JSON.parse(contents);
+		config = await file('./config.json').json();
 	} catch(e) {
 		console.error(e);
 		config = { };
 	}
 
-
-
 	if(!config?.token) {
-		config.token = process.env.TOKEN;
-		if(!config?.token) {
-			const tokenPrompt = await text({
-				message: "Please provide your system's PK token. You can get one by using `pk;token` in DMs with PluralKit.",
-				validate: (str) => str?.length != 64 && "Please provide a valid token."
-			});
+		const tokenPrompt = await text({
+			message: "Please provide your system's PK token. You can get one by using `pk;token` in DMs with PluralKit.",
+			validate: (str) => str?.length != 64 && "Please provide a valid token."
+		});
 
-			config.token = tokenPrompt;
-		}
+		config.token = tokenPrompt;
 
-		await writeFile('./config.json', JSON.stringify(config));
+		await write('./config.json', JSON.stringify(config));
 	}
 
 	API.token = config.token;
@@ -87,13 +80,13 @@ const API = new PKAPI();
 		})
 
 		try {
-			s.start()
 			result = await answer(API, API.token);
-			s.stop()
 		} catch(e) {
 			console.error(e.message ?? e);
 		}
 
 		if(result == 'exit') process.exit(0);
 	}
-})()
+}
+
+await main().catch(console.error);
