@@ -11,8 +11,7 @@ const main = async () => {
 
 	try {
 		config = await file('./config.json').json();
-	} catch(e) {
-		console.error(e);
+	} catch(_) {
 		config = { };
 	}
 
@@ -50,7 +49,7 @@ const main = async () => {
 			if(result?.success) console.log("Job completed successfully!");
 			else console.error("Job failed.");
 
-			if(result.message) console.log(result.message);
+			if(result?.message) console.log(result.message);
 		}
 
 		// increment number of jobs done

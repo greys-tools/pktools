@@ -1,10 +1,16 @@
 {
   "name": "pktools",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "massdelete": "node massdelete"
+    "build:win64": "bun build ./index.js --compile --target=bun-windows-x64 --outfile ./out/pktools_win_x64",
+    "build:winarm": "bun build ./index.js --compile --target=bun-windows-arm64 --outfile ./out/pktools_win_arm64",
+    "build:linux64": "bun build ./index.js --compile --target=bun-linux-x64 --outfile ./out/pktools_linux_x64",
+    "build:linuxarm": "bun build ./index.js --compile --target=bun-linux-arm64 --outfile ./out/pktools_linux_arm64",
+    "build:mac64": "bun build ./index.js --compile --target=bun-darwin-x64 --outfile ./out/pktools_darwin_x64",
+    "build:macarm": "bun build ./index.js --compile --target=bun-darwin-arm64 --outfile ./out/pktools_darwin_arm64",
+    "build:all": "bun run build:win64 && bun run build:winarm && bun run build:linux64 && bun run build:linuxarm && bun run build:mac64 && bun run build:macarm"
   },
   "keywords": [],
   "author": "",

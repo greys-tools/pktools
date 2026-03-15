@@ -1,11 +1,14 @@
 # PK Tools
 *A small collection of command line PluralKit API tools*
 
-## Setup
+## Running
+1. Download the [release file](https://github.com/greys-tools/pktools/releases/latest) for your operating system and put it somewhere handy
+2. Run the file to start the prompter!
+
+## Manual Running
 1. Download this repository and extract it to somewhere safe
-2. Download and install [NodeJS](https://nodejs.org/)
-3. Copy the `.env.example`, fill it out, and save the file/rename it as `.env`
-4. Run the `run` file for your system
+2. Download and install [Bun](https://bun.com/)
+3. Open a terminal and run `bun run index` to start the prompter!
 
 ## Available Tools
 ### Mass Delete
@@ -24,4 +27,4 @@ Saves pretty much all images a system can have:
 If you'd like a tool to be added, or want a tool to be changed, feel free to create an issue on this repo and we'll see about adding it!
 
 ## Support
-Feel free to ping us \@greysdawn in the PK server if you need help, or join our support server [here](https://discord.gg/EvDmXGt)
+Feel free to ping us \@.selenated in the PK server if you need help, or join our projects server [here](https://discord.gg/3y228CvJyQ)

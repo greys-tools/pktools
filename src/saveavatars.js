@@ -1,9 +1,8 @@
-import { progress } from '@clack/prompts';
-import { file, write } from 'bun';
+import { progress, text } from '@clack/prompts';
+import { write } from 'bun';
 import { exists, mkdir } from 'node:fs/promises';
 
-const __dirname = import.meta.dir;
-const dir = `${__dirname}/../files`;
+const dir = `./files`;
 
 const wait = async function(ms) {
 	return new Promise((res, rej) => {
@@ -24,11 +23,9 @@ async function saveAvatars(api, token) {
 	if(!(await exists(`${dir}/groups`))) await mkdir(`${dir}/groups`);
 	if(!(await exists(`${dir}/system`))) await mkdir(`${dir}/system`);
 
-	console.log(sys.members.size, sys.groups.size, 1 + sys.members.size + sys.groups.size);
 	const p = progress({
 		style: 'block',
-		max: 1 + sys.members.size + sys.groups.size,
-		size: 50
+		max: 1 + sys.members.size + sys.groups.size
 	});
 
 	p.start('Downloading avatars...');
@@ -109,6 +106,11 @@ async function saveAvatars(api, token) {
 	}
 
 	p.stop('Avatars downloaded!');
+	p.clear();
+
+	await text({
+		message: 'Continue...',
+	});
 	return { success: true };
 }
 
