@@ -1,4 +1,4 @@
-import { select, text } from '@clack/prompts';
+import { confirm, select, text, progress } from '@clack/prompts';
 
 const CHOICES = [
 	{
@@ -75,13 +75,25 @@ async function massDelete(api, token) {
 		opts = await choice.options(api, token);
 	}
 
+	const conf = await confirm({
+		message: "Are you SURE you want to delete members matching this criteria? " +
+						 "This action can't be undone. Make sure to have a backup of your members just in case!"
+	});
+	if(!conf) return { success: true };
+
+	const p = progress({ max: sys.members.size });
+	p.start('Deleting members...');
 	for(var [id, m] of sys.members) {
-		if(!choice.function(m, opts)) continue;
-		console.log(`Member ${m.id} matched critera. Deleting...`);
+		if(!choice.function(m, opts)) {
+			p.advance(1);
+			continue;
+		}
 		await m.delete();
+		p.advance(1, `Deleted member ${m.id}`);
 		await wait(500); // to avoid rate limiting
 	}
 
+	p.stop('Members deleted!');
 	return { success: true };
 }
 

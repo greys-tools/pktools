@@ -24,8 +24,12 @@ async function saveAvatars(api, token) {
 	if(!(await exists(`${dir}/groups`))) await mkdir(`${dir}/groups`);
 	if(!(await exists(`${dir}/system`))) await mkdir(`${dir}/system`);
 
-	const p = progress({ max: 1 + sys.members.size + sys.groups.size });
-	let pi = 0;
+	console.log(sys.members.size, sys.groups.size, 1 + sys.members.size + sys.groups.size);
+	const p = progress({
+		style: 'block',
+		max: 1 + sys.members.size + sys.groups.size,
+		size: 50
+	});
 
 	p.start('Downloading avatars...');
 	try {
@@ -41,14 +45,13 @@ async function saveAvatars(api, token) {
 			banner: sys.banner
 		})
 	}
-	pi += 1;
+	p.advance(1, 'System avatars downloaded');
 
 	for(var [id, m] of sys.members) {
 		if(!m.avatar_url &&
 			!m.webhook_avatar_url &&
 			!m.banner) {
-			pi += 1;
-			p.advance(pi);
+			p.advance(1);
 			continue;
 		}
 
@@ -73,16 +76,14 @@ async function saveAvatars(api, token) {
 			})
 		}
 
-		pi += 1;
-		p.advance(pi, `Images fetched for member ${m.id}`);
-		await wait(500);
+		p.advance(1, `Images fetched for member ${m.id}`);
+		// await wait(500);
 		// break;
 	}
 
 	for(var [id, g] of sys.groups) {
 		if(!g.banner && !g.icon)  {
-			pi += 1;
-			p.advance(pi);
+			p.advance(1);
 			continue;
 		}
 
@@ -102,9 +103,8 @@ async function saveAvatars(api, token) {
 			})
 		}
 
-		pi += 1;
-		p.advance(pi, `Images fetched for group ${g.id}`);
-		await wait(500);
+		p.advance(1, `Images fetched for group ${g.id}`);
+		// await wait(500);
 		// break;
 	}
 

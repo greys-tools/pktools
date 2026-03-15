@@ -1,4 +1,4 @@
-import { writeFile } from 'fs/promises';
+import { write } from 'bun';
 import { confirm, text } from '@clack/prompts';
 
 async function changeToken(api, token) {
@@ -15,7 +15,7 @@ async function changeToken(api, token) {
 	let config = { token: tokenPrompt };
 	api.token = config.token;
 
-	await writeFile('./config.json', JSON.stringify(config));
+	await write('./config.json', JSON.stringify(config));
 	return { success: true };
 }
 
