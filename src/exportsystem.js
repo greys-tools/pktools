@@ -1,4 +1,4 @@
-import { multiselect, confirm } from '@clack/prompts';
+import { multiselect, confirm, text } from '@clack/prompts';
 import { write } from 'bun';
 import { exists, mkdir } from 'node:fs/promises';
 
@@ -50,10 +50,12 @@ const TEMPLATE = (data) => ({
 	accounts: [],
 	members: data.members?.size ? Array.from(data.members).map(([k, v]) => ({
 		...v,
+		name: v.name + data.suffix,
 		birthday: v.birthday ? formatDate(v.birthday) : null
 	})) : [],
 	groups: data.groups?.size ? Array.from(data.groups).map(([k, v]) => ({
 		...v,
+		name: v.name + data.suffix,
 		members: Array.from(v.members).map(([m,_]) => m)
 	})) : [],
 	switches: data.switches?.size ? Array.from(data.switches).map(([k, v]) => ({
@@ -78,11 +80,17 @@ async function exportSystem(api, token) {
 		required: true,
 	});
 
+	var conf = await confirm({ message: 'Do you want to add a suffix to group/member names?' });
+	var suffix = '';
+	if(conf) {
+		suffix = await text({ message: 'Enter the suffix to add:' });
+	}
+
 	// fetch the desired data
 	var sys = await api.getSystem({ fetch: [...answer, 'config', 'group members'] });
 
 	try {
-		await write(`${dir}/export.json`, JSON.stringify(TEMPLATE(sys)));
+		await write(`${dir}/export.json`, JSON.stringify(TEMPLATE({ ...sys, suffix })));
 	} catch(e) {
 		return { success: false, message: e.message ?? e }
 	}
