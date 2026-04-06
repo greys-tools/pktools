@@ -18,6 +18,6 @@
   "type": "module",
   "dependencies": {
     "@clack/prompts": "1.1.0",
-    "pkapi.js": "^6.2.1"
+    "pkapi.js": "^7.5.1"
   }
 }

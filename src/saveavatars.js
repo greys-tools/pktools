@@ -4,12 +4,6 @@ import { exists, mkdir } from 'node:fs/promises';
 
 const dir = `./files`;
 
-const wait = async function(ms) {
-	return new Promise((res, rej) => {
-		setTimeout(() => res(), ms)
-	})
-}
-
 const saveFile = async function(url, dir, id, type) {
 	let resp = await fetch(url);
 	if(resp) resp = await resp.arrayBuffer();
@@ -74,8 +68,6 @@ async function saveAvatars(api, token) {
 		}
 
 		p.advance(1, `Images fetched for member ${m.id}`);
-		// await wait(500);
-		// break;
 	}
 
 	for(var [id, g] of sys.groups) {
@@ -101,8 +93,6 @@ async function saveAvatars(api, token) {
 		}
 
 		p.advance(1, `Images fetched for group ${g.id}`);
-		// await wait(500);
-		// break;
 	}
 
 	p.stop('Avatars downloaded!');

@@ -1,5 +1,5 @@
 import PKAPI from 'pkapi.js';
-import { select, spinner, text, intro } from '@clack/prompts';
+import { select, text, intro } from '@clack/prompts';
 import { file, write } from 'bun';
 
 import tools from './src/index.js';
@@ -29,7 +29,6 @@ const main = async () => {
 	API.token = config.token;
 
 	const doing = true;
-	const s = spinner();
 	let result;
 	let jobs = 0;
 	while(doing) {
